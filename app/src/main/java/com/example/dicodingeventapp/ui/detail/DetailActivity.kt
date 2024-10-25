@@ -11,12 +11,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.dicodingeventapp.R
+import com.example.dicodingeventapp.data.local.FavoriteEvent
 import com.example.dicodingeventapp.data.remote.response.Event
 import com.example.dicodingeventapp.databinding.ActivityDetailBinding
+import com.example.dicodingeventapp.util.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
+
+    private var isFavorite = false
+    private var thisEvent = Event()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +39,11 @@ class DetailActivity : AppCompatActivity() {
             this,
             ViewModelProvider.NewInstanceFactory()
         )[DetailViewModel::class.java]
+
+        val favoriteAddDeleteViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory.getInstance(application)
+        )[FavoriteAddDeleteViewModel::class.java]
 
         val eventId = intent.getIntExtra("eventId", -1).toString()
         detailViewModel.findEventById(eventId)
@@ -56,10 +67,41 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         }
+
+        favoriteAddDeleteViewModel.getFavoriteEventById(eventId).observe(this) { favEvent ->
+            isFavorite = favEvent != null
+            binding.fabFavorite.setImageResource(
+                if (isFavorite) {
+                    R.drawable.baseline_favorite_24
+                } else {
+                    R.drawable.baseline_favorite_border_24
+                }
+            )
+        }
+
+        binding.fabFavorite.setOnClickListener{
+            val favoriteEvent = FavoriteEvent(
+                id = thisEvent.id.toString(),
+                name = thisEvent.name ?: "",
+                mediaCover = thisEvent.mediaCover,
+                summary = thisEvent.summary
+            )
+
+            if (isFavorite) {
+                favoriteAddDeleteViewModel.delete(favoriteEvent)
+            } else {
+                favoriteAddDeleteViewModel.insert(favoriteEvent)
+            }
+
+            isFavorite = !isFavorite
+        }
+
     }
 
     @SuppressLint("SetTextI18n")
     private fun setEvent(event: Event) {
+        thisEvent = event
+
         val remainingQuota = (event.quota ?: 0) - (event.registrants ?: 0)
         binding.tvEventName.text = event.name
         binding.tvEventOrganizer.text = event.ownerName

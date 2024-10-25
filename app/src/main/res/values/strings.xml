@@ -13,4 +13,7 @@
     <string name="search_event">Search Event</string>
     <string name="close">Close</string>
     <string name="nosearch">Tidak ada hasil ditemukan.</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="favorite">Favorite</string>
+    <string name="no_fav_event">Tidak ada favorite event</string>
 </resources>
