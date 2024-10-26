@@ -15,7 +15,7 @@ import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.FavoriteEvent
 import com.example.dicodingeventapp.data.remote.response.Event
 import com.example.dicodingeventapp.databinding.ActivityDetailBinding
-import com.example.dicodingeventapp.util.ViewModelFactory
+import com.example.dicodingeventapp.ui.factory.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {

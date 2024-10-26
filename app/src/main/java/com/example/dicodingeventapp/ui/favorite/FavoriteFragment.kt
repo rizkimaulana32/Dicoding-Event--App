@@ -10,10 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingeventapp.data.remote.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentFavoriteBinding
-import com.example.dicodingeventapp.ui.adapters.ListEventAdapter
 import com.example.dicodingeventapp.ui.adapters.ListHomeVerticalAdapter
 import com.example.dicodingeventapp.ui.detail.DetailActivity
-import com.example.dicodingeventapp.util.ViewModelFactory
+import com.example.dicodingeventapp.ui.factory.ViewModelFactory
 
 class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
@@ -35,7 +34,11 @@ class FavoriteFragment : Fragment() {
             ViewModelFactory.getInstance(requireActivity().application)
         )[FavoriteViewModel::class.java]
 
-        favoriteViewModel.getAllFavoriteEvents().observe(viewLifecycleOwner) { favoriteEvents ->
+        favoriteViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
+
+        favoriteViewModel.favoriteEvents.observe(viewLifecycleOwner) { favoriteEvents ->
             val items = arrayListOf<ListEventsItem>()
 
             favoriteEvents.map {
@@ -48,8 +51,6 @@ class FavoriteFragment : Fragment() {
 
                 items.add(item)
             }
-
-            favoriteViewModel.checkIfNoFavorites(favoriteEvents)
 
             val adapter = ListHomeVerticalAdapter {
                 val intent = Intent(requireContext(), DetailActivity::class.java)
@@ -71,6 +72,10 @@ class FavoriteFragment : Fragment() {
 
     private fun showNoFavorite(isNoFavorite: Boolean){
         binding.tvNoFavorite.visibility = if (isNoFavorite) View.VISIBLE else View.GONE
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroy() {
