@@ -10,10 +10,10 @@ import androidx.room.Query
 @Dao
 interface FavoriteEventDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(favoriteEvent: FavoriteEvent)
+    suspend fun insert(favoriteEvent: FavoriteEvent)
 
     @Delete
-    fun delete(favoriteEvent: FavoriteEvent)
+    suspend fun delete(favoriteEvent: FavoriteEvent)
 
     @Query("SELECT * FROM favoriteEvent")
     fun getAllFavoriteEvents(): LiveData<List<FavoriteEvent>>

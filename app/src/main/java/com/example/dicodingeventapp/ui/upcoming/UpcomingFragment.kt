@@ -13,6 +13,7 @@ import com.example.dicodingeventapp.data.remote.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentUpcomingBinding
 import com.example.dicodingeventapp.ui.adapters.ListEventAdapter
 import com.example.dicodingeventapp.ui.detail.DetailActivity
+import com.example.dicodingeventapp.ui.factory.EventViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class UpcomingFragment : Fragment() {
@@ -32,11 +33,11 @@ class UpcomingFragment : Fragment() {
 
         val upcomingViewModel = ViewModelProvider(
             this,
-            ViewModelProvider.NewInstanceFactory()
+            EventViewModelFactory.getInstance()
         )[UpcomingViewModel::class.java]
 
-        upcomingViewModel.listEvent.observe(viewLifecycleOwner) { listEvent ->
-            setListEventData(listEvent)
+        upcomingViewModel.listEvent.observe(viewLifecycleOwner) {
+            setListEventData(it)
         }
 
         upcomingViewModel.isLoading.observe(viewLifecycleOwner) {
@@ -87,6 +88,7 @@ class UpcomingFragment : Fragment() {
                     upcomingViewModel.loadUpcomingEvents()
                     true
                 }
+
                 else -> false
             }
         }

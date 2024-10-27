@@ -1,20 +1,25 @@
 package com.example.dicodingeventapp.ui.detail
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.dicodingeventapp.data.local.FavoriteEvent
-import com.example.dicodingeventapp.repository.FavoriteEventRepository
+import com.example.dicodingeventapp.repository.FavoriteRepository
+import kotlinx.coroutines.launch
 
-class FavoriteAddDeleteViewModel(application: Application) : ViewModel() {
-    private val mFavoriteEventRepository: FavoriteEventRepository = FavoriteEventRepository(application)
+class FavoriteAddDeleteViewModel(private val mFavoriteRepository: FavoriteRepository) :
+    ViewModel() {
 
     fun insert(favoriteEvent: FavoriteEvent) {
-        mFavoriteEventRepository.insert(favoriteEvent)
+        viewModelScope.launch {
+            mFavoriteRepository.insert(favoriteEvent)
+        }
     }
 
     fun delete(favoriteEvent: FavoriteEvent) {
-        mFavoriteEventRepository.delete(favoriteEvent)
+        viewModelScope.launch {
+            mFavoriteRepository.delete(favoriteEvent)
+        }
     }
 
-    fun getFavoriteEventById(id: String) = mFavoriteEventRepository.getFavoriteEventById(id)
+    fun getFavoriteEventById(id: String) = mFavoriteRepository.getFavoriteEventById(id)
 }

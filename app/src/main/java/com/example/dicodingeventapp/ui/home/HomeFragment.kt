@@ -13,6 +13,7 @@ import com.example.dicodingeventapp.databinding.FragmentHomeBinding
 import com.example.dicodingeventapp.ui.adapters.ListHomeHorizontalAdapter
 import com.example.dicodingeventapp.ui.adapters.ListHomeVerticalAdapter
 import com.example.dicodingeventapp.ui.detail.DetailActivity
+import com.example.dicodingeventapp.ui.factory.EventViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
 
         val homeViewModel = ViewModelProvider(
             this,
-            ViewModelProvider.NewInstanceFactory()
+            EventViewModelFactory.getInstance()
         )[HomeViewModel::class.java]
 
         homeViewModel.upcomingEvents.observe(viewLifecycleOwner) { listEventsItem ->

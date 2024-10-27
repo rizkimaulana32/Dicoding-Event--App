@@ -13,6 +13,7 @@ import com.example.dicodingeventapp.data.remote.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentFinishedBinding
 import com.example.dicodingeventapp.ui.adapters.ListEventAdapter
 import com.example.dicodingeventapp.ui.detail.DetailActivity
+import com.example.dicodingeventapp.ui.factory.EventViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class FinishedFragment : Fragment() {
@@ -33,7 +34,7 @@ class FinishedFragment : Fragment() {
 
         val finishedViewModel = ViewModelProvider(
             this,
-            ViewModelProvider.NewInstanceFactory()
+            EventViewModelFactory.getInstance()
         )[FinishedViewModel::class.java]
 
         finishedViewModel.listEvent.observe(viewLifecycleOwner) { listEvent ->

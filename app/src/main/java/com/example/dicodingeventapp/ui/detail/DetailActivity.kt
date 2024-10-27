@@ -15,7 +15,8 @@ import com.example.dicodingeventapp.R
 import com.example.dicodingeventapp.data.local.FavoriteEvent
 import com.example.dicodingeventapp.data.remote.response.Event
 import com.example.dicodingeventapp.databinding.ActivityDetailBinding
-import com.example.dicodingeventapp.ui.factory.ViewModelFactory
+import com.example.dicodingeventapp.ui.factory.EventViewModelFactory
+import com.example.dicodingeventapp.ui.factory.FavoriteViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
@@ -37,12 +38,12 @@ class DetailActivity : AppCompatActivity() {
 
         val detailViewModel = ViewModelProvider(
             this,
-            ViewModelProvider.NewInstanceFactory()
+            EventViewModelFactory.getInstance()
         )[DetailViewModel::class.java]
 
         val favoriteAddDeleteViewModel = ViewModelProvider(
             this,
-            ViewModelFactory.getInstance(application)
+            FavoriteViewModelFactory.getInstance(application)
         )[FavoriteAddDeleteViewModel::class.java]
 
         val eventId = intent.getIntExtra("eventId", -1).toString()
@@ -70,16 +71,10 @@ class DetailActivity : AppCompatActivity() {
 
         favoriteAddDeleteViewModel.getFavoriteEventById(eventId).observe(this) { favEvent ->
             isFavorite = favEvent != null
-            binding.fabFavorite.setImageResource(
-                if (isFavorite) {
-                    R.drawable.baseline_favorite_24
-                } else {
-                    R.drawable.baseline_favorite_border_24
-                }
-            )
+            btnFavorite(isFavorite)
         }
 
-        binding.fabFavorite.setOnClickListener{
+        binding.fabFavorite.setOnClickListener {
             val favoriteEvent = FavoriteEvent(
                 id = thisEvent.id.toString(),
                 name = thisEvent.name ?: "",
@@ -94,6 +89,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             isFavorite = !isFavorite
+            btnFavorite(isFavorite)
         }
 
     }
@@ -123,5 +119,15 @@ class DetailActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun btnFavorite(isFavorite: Boolean) {
+        binding.fabFavorite.setImageResource(
+            if (isFavorite) {
+                R.drawable.baseline_favorite_24
+            } else {
+                R.drawable.baseline_favorite_border_24
+            }
+        )
     }
 }

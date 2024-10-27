@@ -12,7 +12,7 @@ import com.example.dicodingeventapp.data.remote.response.ListEventsItem
 import com.example.dicodingeventapp.databinding.FragmentFavoriteBinding
 import com.example.dicodingeventapp.ui.adapters.ListHomeVerticalAdapter
 import com.example.dicodingeventapp.ui.detail.DetailActivity
-import com.example.dicodingeventapp.ui.factory.ViewModelFactory
+import com.example.dicodingeventapp.ui.factory.FavoriteViewModelFactory
 
 class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
@@ -31,7 +31,7 @@ class FavoriteFragment : Fragment() {
 
         val favoriteViewModel = ViewModelProvider(
             this,
-            ViewModelFactory.getInstance(requireActivity().application)
+            FavoriteViewModelFactory.getInstance(requireActivity().application)
         )[FavoriteViewModel::class.java]
 
         favoriteViewModel.isLoading.observe(viewLifecycleOwner) {
