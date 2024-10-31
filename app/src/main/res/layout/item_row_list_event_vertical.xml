@@ -14,13 +14,14 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivImgVr"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
             android:contentDescription="@string/description_image"
             tools:src="@tools:sample/avatars"
+            app:shapeAppearanceOverlay="@style/RoundedM"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +31,7 @@
             android:id="@+id/tvNameVr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="12dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@string/event_name"

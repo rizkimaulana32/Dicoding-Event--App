@@ -33,4 +33,10 @@ interface ApiService {
         @Query("active") active: Int,
         @Query("q") keyword: String
     ): EventResponse
+
+    @GET("events")
+    suspend fun getClosestEvent(
+        @Query("active") active: Int = -1,
+        @Query("limit") limit: Int = 1
+    ): EventResponse
 }

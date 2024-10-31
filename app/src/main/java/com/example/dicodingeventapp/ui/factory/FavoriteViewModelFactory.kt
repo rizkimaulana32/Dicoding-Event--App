@@ -5,12 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.dicodingeventapp.di.Injection
 import com.example.dicodingeventapp.repository.FavoriteRepository
-import com.example.dicodingeventapp.ui.detail.DetailViewModel
 import com.example.dicodingeventapp.ui.detail.FavoriteAddDeleteViewModel
 import com.example.dicodingeventapp.ui.favorite.FavoriteViewModel
-import com.example.dicodingeventapp.ui.finished.FinishedViewModel
-import com.example.dicodingeventapp.ui.home.HomeViewModel
-import com.example.dicodingeventapp.ui.upcoming.UpcomingViewModel
 
 class FavoriteViewModelFactory private constructor(
     private val favoriteRepository: FavoriteRepository

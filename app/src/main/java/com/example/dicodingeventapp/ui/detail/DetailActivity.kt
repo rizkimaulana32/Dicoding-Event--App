@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +18,11 @@ import com.example.dicodingeventapp.data.remote.response.Event
 import com.example.dicodingeventapp.databinding.ActivityDetailBinding
 import com.example.dicodingeventapp.ui.factory.EventViewModelFactory
 import com.example.dicodingeventapp.ui.factory.FavoriteViewModelFactory
+import com.example.dicodingeventapp.ui.factory.SettingViewModelFactory
+import com.example.dicodingeventapp.ui.setting.SettingPreferences
+import com.example.dicodingeventapp.ui.setting.SettingViewModel
+import com.example.dicodingeventapp.ui.setting.datastore
+import com.example.dicodingeventapp.util.Handler
 import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
@@ -29,6 +35,21 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val pref = SettingPreferences.getInstance(application.datastore)
+        val settingViewModel = ViewModelProvider(
+            this,
+            SettingViewModelFactory(pref)
+        )[SettingViewModel::class.java]
+
+        settingViewModel.getThemeSetting()
+            .observe(this) { isDarkModeActive: Boolean ->
+                if (isDarkModeActive) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -79,7 +100,6 @@ class DetailActivity : AppCompatActivity() {
                 id = thisEvent.id.toString(),
                 name = thisEvent.name ?: "",
                 mediaCover = thisEvent.mediaCover,
-                summary = thisEvent.summary
             )
 
             if (isFavorite) {
@@ -99,11 +119,14 @@ class DetailActivity : AppCompatActivity() {
         thisEvent = event
 
         val remainingQuota = (event.quota ?: 0) - (event.registrants ?: 0)
+        val beginTime = Handler.dateFormat(event.beginTime)
+        val endTime = Handler.dateFormat(event.endTime)
+
         binding.tvEventName.text = event.name
         binding.tvEventOrganizer.text = event.ownerName
         binding.tvEventLocation.text = event.cityName
-        binding.tvEvenTime.text = "${event.beginTime} - ${event.endTime}"
-        binding.tvEvenQuota.text = "$remainingQuota quota tersisa"
+        binding.tvEvenTime.text = "$beginTime - $endTime"
+        binding.tvEvenQuota.text = resources.getString(R.string.quota_remaining, remainingQuota)
         binding.tvEventDescription.text =
             event.description?.let { HtmlCompat.fromHtml(it, HtmlCompat.FROM_HTML_MODE_LEGACY) }
 

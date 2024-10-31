@@ -46,7 +46,6 @@ class FavoriteFragment : Fragment() {
                     id = it.id.toInt(),
                     name = it.name,
                     mediaCover = it.mediaCover,
-                    summary = it.summary
                 )
 
                 items.add(item)
@@ -72,6 +71,7 @@ class FavoriteFragment : Fragment() {
 
     private fun showNoFavorite(isNoFavorite: Boolean){
         binding.tvNoFavorite.visibility = if (isNoFavorite) View.VISIBLE else View.GONE
+        binding.tvFavorite.visibility = if (isNoFavorite) View.GONE else View.VISIBLE
     }
 
     private fun showLoading(isLoading: Boolean) {

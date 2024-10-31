@@ -12,5 +12,4 @@ data class FavoriteEvent(
     var id: String = "",
     var name: String = "",
     var mediaCover: String? = null,
-    var summary: String? = null,
 ) : Parcelable
